@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InControl;
 
 public class PlayerMovement : MonoBehaviour
 {
-
+    private InputDevice Controller;
     [SerializeField]
     float moveSpeed = 6f;            // Player's speed when walking.
     [SerializeField]
@@ -16,9 +17,10 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-    // Using the Awake function to set the references
+   
     void Awake()
     {
+        Controller = InputManager.ActiveDevice;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -29,13 +31,17 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        float test = Input.GetAxis("PS4_R2");
-        float hAxis = Input.GetAxis("Horizontal");
-        Debug.Log(test);
-        float vAxis = Input.GetAxis("Vertical");
+        float x = Controller.LeftStickX;
+        float y = 0;
+        float z = Controller.LeftStickY;
+        transform.position += new Vector3(x,y,z);
 
-        Vector3 movement = new Vector3(hAxis, 0f, vAxis);
-        rb.position += movement * moveSpeed * Time.deltaTime;
+        if (Controller.Action1)
+        {
+            transform.position += new Vector3(0, 1, 0);
+        }
+     
+        
     }
 
 }
